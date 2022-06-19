@@ -35,3 +35,15 @@ export function getPittCsvToInfluxDBConsumerProgress() {
 export function setPittCsvToInfluxDBConsumer(entity) {
     return request[3].post(`/kafkaConsumer_api/ConsumerConfig`,entity);
 }
+export function addScheduleTask(entity) {
+    return request[2].post(`/kafkaProducer_api/addNewScheduleTask`,entity);
+}
+export function searchAllActivedScheduleTaskByQuery(entity) {
+    return request[2].post(`/kafkaProducer_api/checkAllActivedScheduleTaskByQuery`,entity);
+}
+export function editScheduleTaskByID(entity) {
+    return request[2].post(`/kafkaProducer_api/editScheduleTaskByID`,entity);
+}
+export function deleteScheduleTaskByID(entity) {
+    return request[2].post(`/kafkaProducer_api/deleteScheduleTaskByID`,entity);
+}

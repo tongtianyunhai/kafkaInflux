@@ -10,25 +10,43 @@
       <!--right direct-->
       <el-container >
         <!--head-->
-        <el-header height="50px" style="text-align: left;background-color: wheat" >
-          <el-row>
-            <el-col :span="4">
-            <el-popover
+        <el-header height="10" style="text-align: left;background-color: white" >
+          <el-menu
+                   router
+                  :default-active="activeIndex"
+                  class="el-menu-demo" mode="horizontal"
+                  @select="handleSelect"
+                  background-color="#545c64"
+                  text-color="#fff"
+                  active-text-color="#ffd04b">
+            <el-row>
+              <el-col :span="2">
+            <el-menu-item index="1" route="/show">main</el-menu-item>
+              </el-col>
+              <el-col :span="2">
+            <el-menu-item index="2" route="/history">history</el-menu-item>
+              </el-col>
+              <el-col :span="18">
+                &nbsp
+              </el-col>
+              <el-col :span="2">
+            <el-menu-item >
+              <el-popover
                     placement="bottom"
                     width="50"
                     height="50"
                     trigger="click"
                     style="box-shadow: 0 2px 12px 0 rgba(1, 0, 0, 0.1) "
             >
-                  <a href="/" @click="signout" >sign out</a>
-
-              <a slot="reference" style="margin: 10px;height: 40px;width: 100px; color: black;line-height: normal" >
-                 Welcome! {{user.nickName}}
+              <a href="/" @click="signout" >sign out</a>
+              <a slot="reference" style="margin: 10px;height: 40px;width: 100px; color: #ffbb1f;line-height: normal" >
+                Welcome! {{user.nickName}}
               </a>
             </el-popover>
-            </el-col>
-          </el-row>
-
+            </el-menu-item>
+              </el-col>
+            </el-row>
+          </el-menu>
         </el-header>
         <el-main>
           <div class="main-box">

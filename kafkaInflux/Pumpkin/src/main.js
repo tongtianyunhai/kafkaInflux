@@ -7,7 +7,6 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'normalize.css/normalize.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import router from './router'
-Vue.config.productionTip = false
 Vue.use(ElementUI,{ locale });
 
 new Vue({

@@ -157,7 +157,9 @@ let main = {
 
             //judge
             menuList3:[],
+            activeIndex: '1',
         };
+
     },
 
     methods:{
@@ -185,6 +187,9 @@ let main = {
         selectMenu(key, keyPath) {
             this.currentIndexLight = key;
             console.log(key, keyPath)
+        },
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
         },
         showMenu(){
             console.log("user"+localStorage.getItem("user"))

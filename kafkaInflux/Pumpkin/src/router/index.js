@@ -5,7 +5,8 @@ import Main from "@/views/main/index.vue"
 
 
 import Show from '../views/show/index.vue'
-// imlport Home from '../views/Home.vue'
+import History from '../views/history/index.vue'
+
 
 Vue.use(VueRouter)
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
         path: '/show',
         name: 'Show',
         component: Show,
+      },
+      {
+        path: '/history',
+        name: 'History',
+        component: History,
       },
   ]
   }
