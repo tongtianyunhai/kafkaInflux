@@ -1,4 +1,4 @@
-import {deleteScheduleTaskByID,editScheduleTaskByID,searchAllActivedScheduleTaskByQuery,addScheduleTask,startPittCsvToInfluxDBProducerProgress,getPittCsvToInfluxDBConsumerProgress,setPittCsvToInfluxDBConsumer,stopPittCsvToInfluxDBConsumer,startPittCsvToInfluxDBConsumer,getPittCsvToInfluxDBConsumerStatus,getPittCsvToInfluxDBProducerStatus,startPittCsvToInfluxDBProducer,stopPittCsvToInfluxDBProducer,startLaCsvToInfluxDBProducer,stopLaCsvToInfluxDBProducer} from '@/api/show'
+import {deleteTaskTypeByName,addTaskType,checkAllTaskType,deleteScheduleTaskByID,editScheduleTaskByID,searchAllActivedScheduleTaskByQuery,addScheduleTask,startPittCsvToInfluxDBProducerProgress,getPittCsvToInfluxDBConsumerProgress,setPittCsvToInfluxDBConsumer,stopPittCsvToInfluxDBConsumer,startPittCsvToInfluxDBConsumer,getPittCsvToInfluxDBConsumerStatus,getPittCsvToInfluxDBProducerStatus,startPittCsvToInfluxDBProducer,stopPittCsvToInfluxDBProducer,startLaCsvToInfluxDBProducer,stopLaCsvToInfluxDBProducer} from '@/api/scheduleTask'
 let show = {
     data() {
         const generateData = _ => {
@@ -34,7 +34,13 @@ let show = {
             editExecuteTime: '',
             editInterval:'',
             editPath:'',
-            tmpTaskType:[],
+            tmpTaskType:'',
+            taskTypes:[],
+            newTaskType: '',
+            taskTypeId:[],
+            taskTypeVo:{
+              taskType: '',
+            },
             DirVo: {
                 dir: '',
             },
@@ -197,8 +203,8 @@ let show = {
             isShow: false,
             isShow2: false,
             isShow3: false,
-            isShowFresher: false,
-            isShowExport: true,
+            isShowView: true,
+            isShowEdit: false,
             isShowServer: true,
             isShowServer2: false,
             isShowServer3: false,
@@ -798,355 +804,16 @@ let show = {
         },
         chooseSystem(command) {
             if(command=="a"){
-                this.isShowFresher=true;
-                this.isShowExport=false;
+                this.isShowEdit=true;
+                this.isShowView=false;
             };
             if(command=="b"){
-                this.isShowFresher=false;
-                this.isShowExport=true;
+                this.isShowEdit=false;
+                this.isShowView=true;
             }
         },
-        async handleChangeService(value) {
-            // console.log(value[1]);
-            if(value[1]=="producer"){
-                this.loading=true;
-                this.isShowServer=true;
-                this.isShowServer2=false;
-                let serverDataTmp1=JSON.parse(JSON.stringify(this.serverData));
-                serverDataTmp1.splice(4,4);
-                // pitt producer csvToProducer number:1  producer -serverData index: 1 2 3 4
-                // 1.producer csvToInfluxDB pitt
-                try {
-                    await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                        serverDataTmp1[0]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp1[0].status="stop";
-                };
-                // 2.producer csvToInfluxDB la
-                try {
-                    // await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                    //     serverDataTmp1[1]=response;
-                    // });
-                    serverDataTmp1[1].status="stop";
-                }catch (e) {
-                    serverDataTmp1[1].status="stop";
-                };
-                // 3.producer InfluxDBToCsv pitt
-                try {
-                    // await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                    //     serverDataTmp1[0]=response;
-                    // });
-                    serverDataTmp1[2].status="stop";
-                }catch (e) {
-                    serverDataTmp1[2].status="stop";
-                };
-                // 4.producer InfluxDBToCsv la
-                try {
-                    // await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                    //     serverDataTmp1[3]=response;
-                    // });
-                    serverDataTmp1[3].status="stop";
-                }catch (e) {
-                    serverDataTmp1[3].status="stop";
-                }
-                this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp1));
-                this.loading=false;
-            };
-            if(value[1]=="consumer"){
-                this.isShowServer=true;
-                this.isShowServer2=true;
-                this.loading=true;
-                let serverDataTmp2=JSON.parse(JSON.stringify(this.serverData));
-                serverDataTmp2.splice(0,4);
 
-                // pitt consumer csvToProducer number:5  consumer -serverData index: 4 5 6 7
-                // consumer pitt csvToInfluxDB
-                try {
-                    await  getPittCsvToInfluxDBConsumerStatus().then(response => {
-                        serverDataTmp2[0]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp2[0].status="stop";
-                };
-                // consumer la csvToInfluxDB
-                try {
-                    serverDataTmp2[1].status="stop";
-                }catch (e) {
-                    serverDataTmp2[1].status="stop";
-                };
-                // consumer pitt InfluxDBToCsv
-                try {
-                    serverDataTmp2[2].status="stop";
-                }catch (e) {
-                    serverDataTmp2[2].status="stop";
-                };
-                // consumer la InfluxDBToCsv
-                try {
-                    serverDataTmp2[3].status="stop";
-                }catch (e) {
-                    serverDataTmp2[3].status="stop";
-                }
-                serverDataTmp2.forEach(function(item,index){
-                    item.isShowServer3=true;
-                });
-                this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp2));
-                this.loading=false;
-            };
-            if(value[1]=="pittsburgh"){
-                this.loading=true;
-                this.isShowServer=true;
-                this.isShowServer2=true;
-                let serverDataTmp3=JSON.parse(JSON.stringify(this.serverData));
-                serverDataTmp3.splice(1,1);
-                serverDataTmp3.splice(2,1);
-                serverDataTmp3.splice(3,1);
-                serverDataTmp3.splice(4,1);
-                try {
-                    await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                        serverDataTmp3[0]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp3[0].status="stop";
-                };
-                try {
-                    serverDataTmp3[1].status="stop";
-                }catch (e) {
-                    serverDataTmp3[1].status="stop";
-                };
-                try {
-                    await  getPittCsvToInfluxDBConsumerStatus().then(response => {
-                        serverDataTmp3[2]=response;
-                        serverDataTmp3[2].isShowServer3=true;
-                    });
-                }catch (e) {
-                    serverDataTmp3[2].status="stop";
-                    serverDataTmp3[2].isShowServer3=true;
-                };
-                try {
-                    serverDataTmp3[3].status="stop";
-                    serverDataTmp3[3].isShowServer3=true;
-                }catch (e) {
-                    serverDataTmp3[3].status="stop";
-                    serverDataTmp3[3].isShowServer3=true;
-                };
-                this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp3));
-                this.loading=false;
-            };
-            if(value[1]=="la"){
-                this.loading=true;
-                this.isShowServer=true;
-                this.isShowServer2=true;
-                let serverDataTmp4=JSON.parse(JSON.stringify(this.serverData));
-                serverDataTmp4.splice(0,1);
-                serverDataTmp4.splice(1,1);
-                serverDataTmp4.splice(2,1);
-                serverDataTmp4.splice(3,1);
-                try {
-                    serverDataTmp4[0].status="stop";
-                }catch (e) {
-                    serverDataTmp4[0].status="stop";
-                };
-                try {
-                    serverDataTmp4[1].status="stop";
-                }catch (e) {
-                    serverDataTmp4[1].status="stop";
-                };
-                try {
-                    serverDataTmp4[2].status="stop";
-                    serverDataTmp4[2].isShowServer3=true;
-                }catch (e) {
-                    serverDataTmp4[2].status="stop";
-                    serverDataTmp4[2].isShowServer3=true;
-                };
-                try {
-                    serverDataTmp4[3].status="stop";
-                    serverDataTmp4[3].isShowServer3=true;
-                }catch (e) {
-                    serverDataTmp4[3].status="stop";
-                    serverDataTmp4[3].isShowServer3=true;
-                };
-                this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp4));
-                this.loading=false;
-            };
-            if(value[1]=="running"){
-                this.loading=true;
-                this.isShowServer=true;
-                this.isShowServer2=true;
-                let serverDataTmp6=JSON.parse(JSON.stringify(this.serverData));
-                try {
-                    await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                        serverDataTmp6[0]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp6[0].status="stop";
-                };
-                try {
-                    serverDataTmp6[1].status="stop";
-                }catch (e) {
-                    serverDataTmp6[1].status="stop";
-                };
-                try {
-                    serverDataTmp6[2].status="stop";
-                }catch (e) {
-                    serverDataTmp6[2].status="stop";
-                };
-                try {
-                    serverDataTmp6[3].status="stop";
-                }catch (e) {
-                    serverDataTmp6[3].status="stop";
-                };
-                try {
-                    await  getPittCsvToInfluxDBConsumerStatus().then(response => {
-                        serverDataTmp6[4]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp6[4].status="stop";
-                };
-                try {
-                    serverDataTmp6[5].status="stop";
-                }catch (e) {
-                    serverDataTmp6[5].status="stop";
-                };
-                try {
-                    serverDataTmp6[6].status="stop";
-                }catch (e) {
-                    serverDataTmp6[6].status="stop";
-                };
-                try {
-                    serverDataTmp6[7].status="stop";
 
-                }catch (e) {
-                    serverDataTmp6[7].status="stop";
-                };
-                const serverDataTmp7=serverDataTmp6.filter(item => item.status=="running");
-                serverDataTmp7.forEach(function(item,index){
-                    if(item.type=="consumer"){
-                        item.isShowServer3=true;
-                    }
-                });
-                this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp7));
-                this.loading=false;
-            };
-            if(value[1]=="stop"){
-                this.loading=true;
-                this.isShowServer=true;
-                this.isShowServer2=true;
-                let serverDataTmp8=JSON.parse(JSON.stringify(this.serverData));
-                try {
-                    await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                        serverDataTmp8[0]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp8[0].status="stop";
-                };
-                try {
-                    serverDataTmp8[1].status="stop";
-                }catch (e) {
-                    serverDataTmp8[1].status="stop";
-                };
-                try {
-                    serverDataTmp8[2].status="stop";
-                }catch (e) {
-                    serverDataTmp8[2].status="stop";
-                };
-                try {
-                    serverDataTmp8[3].status="stop";
-                }catch (e) {
-                    serverDataTmp8[3].status="stop";
-                };
-                try {
-                    await  getPittCsvToInfluxDBConsumerStatus().then(response => {
-                        serverDataTmp8[4]=response;
-                    });
-                }catch (e) {
-                    serverDataTmp8[4].status="stop";
-                };
-                try {
-                    serverDataTmp8[5].status="stop";
-                }catch (e) {
-                    serverDataTmp8[5].status="stop";
-                };
-                try {
-                    serverDataTmp8[6].status="stop";
-                }catch (e) {
-                    serverDataTmp8[6].status="stop";
-                };
-                try {
-                    serverDataTmp8[7].status="stop";
-
-                }catch (e) {
-                    serverDataTmp8[7].status="stop";
-                };
-                const serverDataTmp9=serverDataTmp8.filter(item => item.status=="stop");
-                serverDataTmp9.forEach(function(item,index){
-                    if(item.type=="consumer"){
-                        item.isShowServer3=true;
-                    }
-                });
-                this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp9));
-                this.loading=false;
-            }
-        },
-        async showInit(){
-            this.isShowServer=true;
-            this.isShowServer2=true;
-            let serverDataTmp5=JSON.parse(JSON.stringify(this.serverData));
-            try {
-                await  getPittCsvToInfluxDBProducerStatus().then(response => {
-                    serverDataTmp5[0]=response;
-                });
-            }catch (e) {
-                serverDataTmp5[0].status="stop";
-            };
-            try {
-                serverDataTmp5[1].status="stop";
-            }catch (e) {
-                serverDataTmp5[1].status="stop";
-            };
-            try {
-                serverDataTmp5[2].status="stop";
-            }catch (e) {
-                serverDataTmp5[2].status="stop";
-            };
-            try {
-                serverDataTmp5[3].status="stop";
-            }catch (e) {
-                serverDataTmp5[3].status="stop";
-            };
-            try {
-                await  getPittCsvToInfluxDBConsumerStatus().then(response => {
-                    serverDataTmp5[4]=response;
-                    serverDataTmp5[4].isShowServer3=true;
-                });
-            }catch (e) {
-                serverDataTmp5[4].status="stop";
-                serverDataTmp5[4].isShowServer3=true;
-            };
-            try {
-                serverDataTmp5[5].status="stop";
-                serverDataTmp5[5].isShowServer3=true;
-            }catch (e) {
-                serverDataTmp5[5].status="stop";
-                serverDataTmp5[5].isShowServer3=true;
-            };
-            try {
-                serverDataTmp5[6].status="stop"
-                serverDataTmp5[6].isShowServer3=true;
-            }catch (e) {
-                serverDataTmp5[6].status="stop";
-                serverDataTmp5[6].isShowServer3=true;
-            };
-            try {
-                serverDataTmp5[7].status="stop";
-                serverDataTmp5[7].isShowServer3=true;
-            }catch (e) {
-                serverDataTmp5[7].status="stop";
-                serverDataTmp5[7].isShowServer3=true;
-            };
-            this.serverDataTmp=JSON.parse(JSON.stringify(serverDataTmp5));
-            this.loading=false;
-        },
         async currentPageChange(currentPage){
             //console.log(currentPage);
             this.searchParams.currentPage = currentPage;
@@ -1157,7 +824,8 @@ let show = {
             console.log("value6 "+this.value6[0]);
             this.searchParams.startTime=this.value6[0];
             this.searchParams.expireTime=this.value6[1];
-            this.searchParams.taskType=this.tmpTaskType[0];
+            this.searchParams.taskType=this.tmpTaskType;
+            console.log("taskType "+this.tmpTaskType);
             searchAllActivedScheduleTaskByQuery(this.searchParams).then(response => {
                 this.total = response.total;
                 this.tableData4 = response.data;
@@ -1199,7 +867,27 @@ let show = {
         handleChangeInterval(value) {
             console.log(value)
         },
+        checkTaskType() {
+            checkAllTaskType().then(response => {
+                this.taskTypes=response;
+                console.log(this.taskTypes+" 123")
 
+            });
+        },
+        async addTaskType(){
+            this.taskTypeVo.taskType=this.newTaskType;
+            addTaskType(this.taskTypeVo).then(response => {
+            });
+            this.newTaskType="";
+            this.checkTaskType();
+        },
+        async deleteTaskType(){
+            this.taskTypeVo.taskType=this.newTaskType;
+            deleteTaskTypeByName(this.taskTypeVo).then(response => {
+            });
+            this.newTaskType="";
+            this.checkTaskType();
+        },
     },
 
     beforeDestroy(){
@@ -1207,7 +895,7 @@ let show = {
     },
     created(){
         this.checkAllScheduleTask();
-        this.showInit();
+        this.checkTaskType();
     }
 };
 

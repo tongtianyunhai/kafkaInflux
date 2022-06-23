@@ -6,6 +6,7 @@ import Main from "@/views/main/index.vue"
 
 import Show from '../views/show/index.vue'
 import History from '../views/history/index.vue'
+import Server from '../views/server/index.vue'
 
 
 Vue.use(VueRouter)
@@ -30,6 +31,10 @@ const routes = [
         path: '/history',
         name: 'History',
         component: History,
+      }, {
+        path: '/server',
+        name: 'Server',
+        component: Server,
       },
   ]
   }

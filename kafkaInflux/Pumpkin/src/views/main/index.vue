@@ -20,13 +20,16 @@
                   text-color="#fff"
                   active-text-color="#ffd04b">
             <el-row>
-              <el-col :span="2">
-            <el-menu-item index="1" route="/show">main</el-menu-item>
+              <el-col :span="1">
+                <el-menu-item index="2" route="/server">server</el-menu-item>
               </el-col>
-              <el-col :span="2">
+              <el-col :span="1">
+            <el-menu-item index="1" route="/show">scheduleTask</el-menu-item>
+              </el-col>
+              <el-col :span="1">
             <el-menu-item index="2" route="/history">history</el-menu-item>
               </el-col>
-              <el-col :span="18">
+              <el-col :span="16">
                 &nbsp
               </el-col>
               <el-col :span="2">
