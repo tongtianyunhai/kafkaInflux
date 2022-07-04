@@ -77,50 +77,47 @@
             <el-row>
                 <el-card class="box-card" shadow="always" style="background-color: blanchedalmond">
                     <div  slot="header" align="left">
-                        <el-dropdown  trigger="click" @command="chooseMethods">
-                        <el-button type="primary" >
-                            Methods<i class="el-icon-arrow-down el-icon--right"></i>
-                        </el-button>
-                        <el-dropdown-menu slot="dropdown" >
-                            <el-dropdown-item command="a">manually</el-dropdown-item>
-                            <el-dropdown-item command="b">timer</el-dropdown-item>
-                        </el-dropdown-menu>
-                        </el-dropdown>
-                        <br/>
-                        <br/>
-                        <el-card v-if="isShow2" style="background-color: beige">
+                        <!--<el-dropdown  trigger="click" @command="chooseMethods">-->
+                        <!--<el-button type="primary" >-->
+                            <!--Methods<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                        <!--</el-button>-->
+                        <!--<el-dropdown-menu slot="dropdown" >-->
+                            <!--<el-dropdown-item command="a">manually</el-dropdown-item>-->
+                            <!--<el-dropdown-item command="b">timer</el-dropdown-item>-->
+                        <!--</el-dropdown-menu>-->
+                        <!--</el-dropdown>-->
+                        <!--<br/>-->
+                        <!--<br/>-->
+                        <!--<el-card v-if="isShow2" style="background-color: beige">-->
+                        <!--<el-row>-->
+                        <!--</el-row>-->
+                        <!--<el-row :gutter="10">-->
+                            <!--<el-col :span="3">-->
+                                <!--<el-select v-model="value7" placeholder="type"  v-if="isShow2" >-->
+                                    <!--<el-option-->
+                                            <!--v-for="item in taskTypes"-->
+                                            <!--:key="item.tid"-->
+                                            <!--:label="item.taskType"-->
+                                            <!--:value="item.taskType">-->
+                                    <!--</el-option>-->
+                                <!--</el-select>-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="8">-->
+                                <!--<el-input v-model="DirVo.dir" placeholder="please Input directory path" v-if="isShow2"></el-input>-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="1">-->
+                                <!--<el-button type="primary" @click="changeColor" v-if="isShow2">start</el-button>-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="1">-->
+                                <!--<el-button type="warning" @click="clear" v-if="isShow2">reset</el-button>-->
+                            <!--</el-col>-->
+                        <!--</el-row>-->
+                        <!--</el-card>-->
                         <el-row>
-                            <el-col :span="8">
-                                <el-button v-if="isShow2" style="color: red;font-size: small" size="mini" round>check types from instruction and input directory path</el-button>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="10">
-                            <el-col :span="3">
-                                <el-select v-model="value7" placeholder="type"  v-if="isShow2" >
-                                    <el-option
-                                            v-for="item in taskTypes"
-                                            :key="item.tid"
-                                            :label="item.taskType"
-                                            :value="item.taskType">
-                                    </el-option>
-                                </el-select>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-input v-model="DirVo.dir" placeholder="please Input directory path" v-if="isShow2"></el-input>
-                            </el-col>
-                            <el-col :span="1">
-                                <el-button type="primary" @click="changeColor" v-if="isShow2">start</el-button>
-                            </el-col>
-                            <el-col :span="1">
-                                <el-button type="warning" @click="clear" v-if="isShow2">reset</el-button>
-                            </el-col>
-                        </el-row>
-                        </el-card>
-                        <el-row>
-                            <el-card  v-if="isShow3" style="background-color: beige">
-                            <el-form ref="form" :model="form" label-width="10%"  v-if="isShow3">
+                            <el-card  style="background-color: beige">
+                            <el-form ref="form" :model="form" label-width="10%"  >
                                 <el-form-item label="chooseType">
-                                        <el-select v-model="value8" placeholder="type"  v-if="isShow3" style="width: 20%">
+                                        <el-select v-model="value8" placeholder="type"   style="width: 20%">
                                             <el-option
                                                     v-for="item in taskTypes"
                                                     :key="item.tid"
@@ -130,7 +127,7 @@
                                         </el-select>
                                 </el-form-item>
                                 <el-form-item label="input directory path">
-                                        <el-input v-model="ScheduleTaskVo.dir" placeholder="Input directory path" style="width: 20%" v-if="isShow3"></el-input>
+                                        <el-input v-model="ScheduleTaskVo.dir" placeholder="Input directory path" style="width: 20%" ></el-input>
                                 </el-form-item>
                                 <el-form-item label="choose execute periode">
                                         <el-date-picker
@@ -138,7 +135,7 @@
                                                 type="daterange"
                                                 range-separator="To"
                                                 start-placeholder="Start date"
-                                                end-placeholder="End date" v-if="isShow3">
+                                                end-placeholder="End date">
                                         </el-date-picker>
                                 </el-form-item>
                                 <el-form-item label="choose execute time">
@@ -151,38 +148,38 @@
                                         </el-time-picker>
                                 </el-form-item>
                                 <el-form-item label="executeInterval">
-                                    <el-input-number v-model="ScheduleTaskVo.executeInterval" style="width: 20%" v-if="isShow3" @change="handleChangeNumber" :min="1" :max="10"></el-input-number>
+                                    <el-input-number v-model="ScheduleTaskVo.executeInterval" style="width: 20%"  @change="handleChangeNumber" :min="1" :max="10"></el-input-number>
                                 </el-form-item>
                                 <el-form-item label="">
-                                        <el-button type="primary" @click="scheduleTaskStart" v-if="isShow3" >submit</el-button>
-                                        <el-button type="warning" @click="clearScheduleTask" v-if="isShow3" >reset</el-button>
+                                        <el-button type="primary" @click="scheduleTaskStart"  >submit</el-button>
+                                        <el-button type="warning" @click="clearScheduleTask"  >reset</el-button>
                                 </el-form-item>
                             </el-form>
                             </el-card>
                         </el-row>
                     </div>
-                    <div >
-                        <el-row>
-                    <el-descriptions title="Progress details" :column="1" border >
-                        <el-descriptions-item label="source:" >{{tableData3[0].source+": "+tableData3[0].sourceType}}</el-descriptions-item>
-                        <el-descriptions-item label="destination:" >{{tableData3[0].destination+": "+tableData3[0].destinationType}}</el-descriptions-item>
-                    </el-descriptions>
-                        </el-row>
-                        <br/>
-                    <el-row>
-                    <el-col :span="5">
-                        <el-progress type="dashboard" :percentage="percentage" :color="colors"  ></el-progress>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-descriptions   :column="2" border :size="mini" >
-                            <el-descriptions-item label="totalFiles:" >{{this.processResult.total}}</el-descriptions-item>
-                            <el-descriptions-item label="successFiles:">{{this.processResult.success}}</el-descriptions-item>
-                            <el-descriptions-item label="failureFiles:">{{this.processResult.failure}}</el-descriptions-item>
-                            <el-descriptions-item label="totalTime:">{{this.processResult.totalTime}}</el-descriptions-item>
-                        </el-descriptions>
-                    </el-col>
-                    </el-row>
-                    </div>
+                    <!--<div >-->
+                        <!--<el-row>-->
+                    <!--<el-descriptions title="Progress details" :column="1" border >-->
+                        <!--<el-descriptions-item label="source:" >{{tableData3[0].source+": "+tableData3[0].sourceType}}</el-descriptions-item>-->
+                        <!--<el-descriptions-item label="destination:" >{{tableData3[0].destination+": "+tableData3[0].destinationType}}</el-descriptions-item>-->
+                    <!--</el-descriptions>-->
+                        <!--</el-row>-->
+                        <!--<br/>-->
+                    <!--<el-row>-->
+                    <!--<el-col :span="5">-->
+                        <!--<el-progress type="dashboard" :percentage="percentage" :color="colors"  ></el-progress>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-descriptions   :column="2" border :size="mini" >-->
+                            <!--<el-descriptions-item label="totalFiles:" >{{this.processResult.total}}</el-descriptions-item>-->
+                            <!--<el-descriptions-item label="successFiles:">{{this.processResult.success}}</el-descriptions-item>-->
+                            <!--<el-descriptions-item label="failureFiles:">{{this.processResult.failure}}</el-descriptions-item>-->
+                            <!--<el-descriptions-item label="totalTime:">{{this.processResult.totalTime}}</el-descriptions-item>-->
+                        <!--</el-descriptions>-->
+                    <!--</el-col>-->
+                    <!--</el-row>-->
+                    <!--</div>-->
                 </el-card>
                 </el-row>
                 <el-row>

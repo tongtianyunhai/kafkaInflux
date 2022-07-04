@@ -23,11 +23,14 @@
               <el-col :span="1">
                 <el-menu-item index="2" route="/server">server</el-menu-item>
               </el-col>
-              <el-col :span="1">
-            <el-menu-item index="1" route="/show">scheduleTask</el-menu-item>
+              <el-col :span="2">
+            <el-menu-item index="2" route="/show">scheduleTask</el-menu-item>
+              </el-col>
+              <el-col :span="2">
+                <el-menu-item index="3" route="/newTask">newTask</el-menu-item>
               </el-col>
               <el-col :span="1">
-            <el-menu-item index="2" route="/history">history</el-menu-item>
+            <el-menu-item index="4" route="/history">history</el-menu-item>
               </el-col>
               <el-col :span="16">
                 &nbsp
